@@ -1,0 +1,1687 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>thirst. | Artisan Beverage & Liquid Craft</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              blue: '#00b4d8',
+              matcha: '#2d6a4f',
+              thai: '#e85d04',
+              mango: '#f77f00'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            serif: ['Playfair Display', 'Georgia', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #090d16; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #334155; }
+
+    /* Custom Cursor Styles */
+    @media (pointer: fine) {
+      body { cursor: none; }
+      .custom-cursor, .cursor-dot { pointer-events: none; position: fixed; z-index: 9999; border-radius: 50%; }
+      .custom-cursor {
+        width: 38px; height: 38px;
+        border: 1.5px solid rgba(0, 180, 216, 0.6);
+        transition: transform 0.15s ease-out, width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s;
+        transform: translate(-50%, -50%);
+      }
+      .cursor-dot {
+        width: 6px; height: 6px;
+        background-color: #00b4d8;
+        transform: translate(-50%, -50%);
+        transition: transform 0.05s linear;
+      }
+      .custom-cursor.hovering {
+        width: 58px; height: 58px;
+        background-color: rgba(0, 180, 216, 0.12);
+        border-color: rgba(0, 180, 216, 0.9);
+      }
+    }
+
+    /* Glow and Float Animations */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(2deg); }
+    }
+    .animate-float { animation: floatSlow 5s ease-in-out infinite; }
+
+    @keyframes pulseAura {
+      0%, 100% { opacity: 0.25; transform: scale(1); }
+      50% { opacity: 0.55; transform: scale(1.08); }
+    }
+    .ambient-aura { animation: pulseAura 4s ease-in-out infinite; }
+
+    /* Glassmorphism Classes */
+    .glass-card {
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-nav {
+      background: rgba(9, 13, 22, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    /* Scroll Reveal Initial State */
+    .reveal-elem {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-elem.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Fly-to-cart particle animation */
+    .fly-particle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 99999;
+      border-radius: 50%;
+      transition: all 0.75s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+  </style>
+</head>
+<body class="bg-[#090d16] text-slate-100 min-h-screen selection:bg-cyan-500 selection:text-black relative overflow-x-hidden">
+
+  <!-- Custom Cursor Elements (Desktop only) -->
+  <div class="custom-cursor hidden md:block" id="customCursor"></div>
+  <div class="cursor-dot hidden md:block" id="cursorDot"></div>
+
+  <!-- Top Scroll Progress Bar -->
+  <div class="fixed top-0 left-0 h-[3px] bg-gradient-to-r from-cyan-400 via-emerald-400 via-amber-400 to-orange-500 z-50 transition-all duration-75" id="scrollProgress" style="width: 0%;"></div>
+
+  <!-- NAVIGATION BAR -->
+  <header class="fixed top-0 inset-x-0 z-40 glass-nav transition-all duration-300" id="mainNavbar">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Logo -->
+      <a href="#hero" class="flex items-center gap-2.5 group cursor-pointer">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-cyan-500/25 group-hover:scale-105 transition-transform">
+          <svg class="w-5 h-5 drop-shadow" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-xl font-bold tracking-widest text-white font-serif uppercase">thirst<span class="text-cyan-400">.</span></span>
+          <span class="text-[10px] tracking-wider text-slate-400 uppercase -mt-1 font-mono">Cold Crafted</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Menu -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+        <a href="#signature" class="hover:text-cyan-400 transition-colors cursor-pointer py-1 relative group">
+          เมนูซิกเนเจอร์ (Signature)
+          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-cyan-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        <a href="#mixology" class="hover:text-cyan-400 transition-colors cursor-pointer py-1 relative group">
+          Mixology Studio
+          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-cyan-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        <a href="#craftsmanship" class="hover:text-cyan-400 transition-colors cursor-pointer py-1 relative group">
+          ศิลปะแห่งวัตถุดิบ
+          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-cyan-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        <a href="#reviews" class="hover:text-cyan-400 transition-colors cursor-pointer py-1 relative group">
+          เสียงตอบรับ
+          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-cyan-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+      </nav>
+
+      <!-- Action Buttons (Sound + Cart) -->
+      <div class="flex items-center gap-3">
+        <!-- Web Audio Synthesizer Toggle -->
+        <button id="btnSoundToggle" class="w-10 h-10 rounded-xl glass-card flex items-center justify-center text-slate-300 hover:text-white hover:border-cyan-500/50 transition-all" title="เปิด/ปิดเสียงเอฟเฟกต์แอนิเมชัน">
+          <span id="soundIcon" class="text-sm">🔊</span>
+        </button>
+
+        <!-- Cart Button -->
+        <button id="btnOpenCart" class="relative px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-medium text-sm shadow-lg shadow-cyan-500/25 flex items-center gap-2 transition-all hover:scale-105 active:scale-95">
+          <span>🛍️ ตะกร้า</span>
+          <span id="cartCountBadge" class="w-5 h-5 rounded-full bg-white text-slate-900 font-bold text-xs flex items-center justify-center">0</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section id="hero" class="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden min-h-screen flex items-center">
+    
+    <!-- Ambient Background Blobs -->
+    <div class="absolute top-1/4 left-1/10 w-96 h-96 bg-cyan-500/20 rounded-full blur-[120px] pointer-events-none ambient-aura"></div>
+    <div class="absolute bottom-1/4 right-1/10 w-96 h-96 bg-amber-500/15 rounded-full blur-[140px] pointer-events-none ambient-aura" style="animation-delay: -2s;"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Hero Text (7 cols) -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-card border-cyan-500/30 text-cyan-400 text-xs font-medium tracking-wide">
+            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+            ✦ Pure Cold-Brew & Artisan Craftsmanship
+          </div>
+
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.15]">
+            ปลุกทุกสัมผัสความสดชื่น<br>
+            ด้วยเครื่องดื่ม <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-blue-500">ศิลปะระดับมาสเตอร์</span>
+          </h1>
+
+          <p class="text-base sm:text-lg text-slate-400 max-w-xl leading-relaxed">
+            สัมผัสรสชาติอันสมบูรณ์แบบจาก 4 ซิกเนเจอร์เมนู คัดสรรวัตถุดิบชั้นเลิศตั้งแต่ชาเขียวมัทฉะอุจิ ชาไทยแท้เข้มข้น ผลไม้เมืองร้อน ไปจนถึงม็อกเทลโซดาสีฟ้าสดใส
+          </p>
+
+          <!-- CTA Buttons -->
+          <div class="flex flex-wrap gap-4 pt-3">
+            <a href="#signature" class="px-7 py-3.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold text-sm shadow-xl shadow-cyan-500/30 transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
+              <span>สำรวจเมนูซิกเนเจอร์</span>
+              <span>↓</span>
+            </a>
+            <a href="#mixology" class="px-7 py-3.5 rounded-2xl glass-card hover:bg-slate-800 text-slate-200 font-semibold text-sm border border-slate-700/80 transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
+              <span>🧪 ผสมเครื่องดื่มของคุณเอง</span>
+            </a>
+          </div>
+
+          <!-- Feature Metric Badges -->
+          <div class="pt-6 grid grid-cols-3 gap-4 border-t border-slate-800/80 max-w-lg">
+            <div>
+              <div class="text-2xl font-extrabold text-white font-mono">100%</div>
+              <div class="text-xs text-slate-400">ใบชาแท้ & วัตถุดิบธรรมชาติ</div>
+            </div>
+            <div>
+              <div class="text-2xl font-extrabold text-cyan-400 font-mono">4.9 ★</div>
+              <div class="text-xs text-slate-400">รีวิวเฉลี่ยจากลูกค้า</div>
+            </div>
+            <div>
+              <div class="text-2xl font-extrabold text-amber-400 font-mono">15,000+</div>
+              <div class="text-xs text-slate-400">แก้วที่รังสรรค์แล้ว</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Visual Showcase (5 cols): 3D Glass Interactive Canvas -->
+        <div class="lg:col-span-5 flex flex-col items-center justify-center relative [perspective:1200px]">
+          
+          <!-- Backlight Spotlight -->
+          <div id="heroAura" class="absolute w-72 h-72 rounded-full blur-3xl opacity-40 bg-cyan-500 ambient-aura -z-0"></div>
+
+          <!-- 3D Tilting Hero Drink Card -->
+          <div id="heroDrinkCard" class="relative glass-card rounded-3xl p-6 sm:p-8 flex flex-col items-center shadow-2xl transition-transform duration-100 ease-out z-10 w-full max-w-sm border border-white/10 group cursor-pointer">
+            
+            <!-- Quick Badge -->
+            <div class="absolute -top-3.5 bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-lg">
+              ✨ SIGNATURE OF THE DAY
+            </div>
+
+            <!-- Glass Vessel Area -->
+            <div class="relative w-[180px] h-[280px] rounded-[24px] p-1.5 border-2 border-white/40 shadow-2xl overflow-hidden bg-white/5 backdrop-blur-sm my-4">
+              <!-- Glass Highlights -->
+              <div class="absolute inset-y-0 left-2 w-3 bg-gradient-to-r from-white/40 to-transparent rounded-full pointer-events-none z-20"></div>
+              <div class="absolute top-2 inset-x-4 h-1.5 bg-white/25 rounded-full pointer-events-none z-20"></div>
+              
+              <!-- thirst Brand mark -->
+              <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-20 opacity-80">
+                <svg class="w-5 h-5 text-white drop-shadow mb-0.5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+                </svg>
+                <span class="text-white font-serif tracking-widest text-sm font-bold drop-shadow">thirst</span>
+              </div>
+
+              <!-- Main Hero Canvas -->
+              <canvas id="heroCanvas" width="180" height="280" class="w-full h-full rounded-[18px] block"></canvas>
+            </div>
+
+            <!-- Wooden Coaster -->
+            <div class="w-40 h-4 rounded-full bg-[#835332] shadow-xl border border-[#633a20] -mt-2 z-10 flex items-center justify-center">
+              <div class="w-36 h-1.5 rounded-full border border-[#9b663e]/40 bg-[#724526]"></div>
+            </div>
+
+            <!-- Bottom Floating Card Info -->
+            <div class="w-full mt-4 text-center">
+              <h3 id="heroDrinkTitle" class="text-lg font-bold text-white">Iced Blue Lagoon Mocktail</h3>
+              <p class="text-xs text-slate-400 mt-0.5">ขยับเมาส์เพื่อเอียงแก้ว 3D หรือคลิกเพื่อคนน้ำ</p>
+            </div>
+          </div>
+
+          <!-- Floating Micro Badges -->
+          <div class="absolute -bottom-6 -left-4 glass-card px-3.5 py-2 rounded-2xl flex items-center gap-2.5 shadow-xl animate-float border border-white/10 hidden sm:flex">
+            <span class="text-lg">🧊</span>
+            <div class="text-left">
+              <span class="block text-[10px] text-slate-400 uppercase">อุณหภูมิเสิร์ฟ</span>
+              <span class="text-xs font-bold text-white font-mono">2°C Ice Cold</span>
+            </div>
+          </div>
+
+          <div class="absolute -top-4 -right-4 glass-card px-3.5 py-2 rounded-2xl flex items-center gap-2.5 shadow-xl animate-float border border-white/10 hidden sm:flex" style="animation-delay: -2.5s;">
+            <span class="text-lg">🌿</span>
+            <div class="text-left">
+              <span class="block text-[10px] text-slate-400 uppercase">ความสดชื่น</span>
+              <span class="text-xs font-bold text-emerald-400">100% Organic</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SIGNATURE 4-DRINKS INTERACTIVE SHOWCASE SECTION -->
+  <section id="signature" class="py-24 relative border-t border-slate-800/80 bg-slate-950/60">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Header -->
+      <div class="text-center max-w-2xl mx-auto mb-14 reveal-elem">
+        <span class="text-xs font-bold text-cyan-400 tracking-wider uppercase font-mono">Crafted Selection</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-2">เมนูซิกเนเจอร์ 4 แก้วแห่งปี</h2>
+        <p class="text-slate-400 text-sm mt-3">
+          เลือกสัมผัสรสชาติอันโดดเด่น ทดลองสั่งการจำลองของเหลวแบบฟิสิกส์ หรือเพิ่มลงในตะกร้าเพื่อลิ้มลอง
+        </p>
+      </div>
+
+      <!-- Drink Tabs Selector -->
+      <div class="flex justify-center mb-10 overflow-x-auto pb-2 custom-scroll reveal-elem">
+        <div class="glass-card p-1.5 rounded-2xl flex gap-1.5 min-w-max border border-slate-800" id="showcaseTabs">
+          <button data-drink="0" class="showcase-tab active px-4 py-2.5 rounded-xl text-xs font-semibold bg-cyan-500 text-slate-950 flex items-center gap-2 shadow-lg transition-all">
+            <span>🍹</span> Blue Lagoon Mocktail
+          </button>
+          <button data-drink="1" class="showcase-tab px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white flex items-center gap-2 transition-all">
+            <span>🍵</span> Iced Matcha Latte
+          </button>
+          <button data-drink="2" class="showcase-tab px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white flex items-center gap-2 transition-all">
+            <span>🧋</span> Iced Thai Tea Latte
+          </button>
+          <button data-drink="3" class="showcase-tab px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white flex items-center gap-2 transition-all">
+            <span>🥭</span> Mango Passionfruit
+          </button>
+        </div>
+      </div>
+
+      <!-- Interactive Drink Stage -->
+      <div class="glass-card rounded-3xl p-6 md:p-10 border border-slate-800/80 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center reveal-elem">
+        
+        <!-- Left: Interactive Glass Simulator (5 cols) -->
+        <div class="lg:col-span-5 flex flex-col items-center justify-center relative [perspective:1000px]">
+          <!-- Drink Backglow -->
+          <div id="showcaseAura" class="absolute w-56 h-56 rounded-full blur-3xl opacity-35 bg-cyan-500 transition-all duration-700 pointer-events-none"></div>
+
+          <!-- Glass Container -->
+          <div id="showcaseGlassCard" class="relative cursor-pointer transition-transform duration-75 ease-out flex flex-col items-center">
+            
+            <!-- Straw (for Matcha Latte) -->
+            <div id="showcaseStraw" class="absolute -top-14 right-14 w-3.5 h-36 bg-gradient-to-r from-slate-400 via-slate-100 to-slate-400 rounded-full shadow-lg transform rotate-12 pointer-events-none z-0 transition-opacity duration-500 opacity-0"></div>
+
+            <!-- Rim Garnish -->
+            <div id="showcaseGarnish" class="absolute -top-7 -left-3 w-16 h-16 rounded-full border-4 border-lime-300 bg-lime-400 shadow-xl flex items-center justify-center pointer-events-none z-30 transform -rotate-12 transition-all duration-500">
+              <div class="w-12 h-12 rounded-full border border-lime-200/80 flex items-center justify-center text-lime-950 text-sm font-bold shadow-inner">
+                🍋
+              </div>
+            </div>
+
+            <!-- Glass Shell -->
+            <div class="relative w-[190px] h-[300px] rounded-[26px] p-1.5 border-2 border-white/40 shadow-2xl overflow-hidden bg-white/5 backdrop-blur-sm">
+              <div class="absolute inset-y-0 left-2 w-3 bg-gradient-to-r from-white/40 to-transparent rounded-full pointer-events-none z-20"></div>
+              <div class="absolute top-2 inset-x-4 h-1.5 bg-white/25 rounded-full pointer-events-none z-20"></div>
+
+              <!-- Thirst Logo -->
+              <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-20 opacity-80">
+                <svg class="w-6 h-6 text-white drop-shadow mb-0.5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+                </svg>
+                <span class="text-white font-serif tracking-widest text-base font-bold drop-shadow">thirst</span>
+              </div>
+
+              <!-- Canvas -->
+              <canvas id="showcaseCanvas" width="190" height="300" class="w-full h-full rounded-[20px] block"></canvas>
+            </div>
+
+            <!-- Wooden Coaster -->
+            <div class="w-44 h-4.5 rounded-full bg-[#835332] shadow-xl border border-[#633a20] -mt-2 z-10 flex items-center justify-center">
+              <div class="w-40 h-2 rounded-full border border-[#9b663e]/40 bg-[#724526]"></div>
+            </div>
+          </div>
+
+          <p class="text-xs text-slate-400 mt-4 flex items-center gap-1.5">
+            <span>👆</span> ขยับเมาส์เพื่อเอียงแก้ว หรือคลิกเพื่อคนน้ำ
+          </p>
+        </div>
+
+        <!-- Right: Information & Customizer Controls (7 cols) -->
+        <div class="lg:col-span-7 flex flex-col justify-between space-y-6">
+          
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <span id="scCategoryTag" class="text-xs px-3 py-1 rounded-full font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                Sparkling Mocktail
+              </span>
+              <span class="text-xs text-slate-400">16 oz • เสิร์ฟเย็นจัด</span>
+            </div>
+
+            <h3 id="scDrinkTitle" class="text-3xl font-extrabold text-white">Iced Blue Lagoon Mocktail</h3>
+            <p id="scDrinkDesc" class="text-sm text-slate-300 mt-2 leading-relaxed">
+              ม็อกเทลโซดาสีฟ้าสดใส รสเปรี้ยวอมหวานซาบซ่าจากบลูคูราโซ่และมะนาวสด พร้อมใบสะระแหน่หอมสดชื่น ดับกระหายคลายร้อนในทันที
+            </p>
+          </div>
+
+          <!-- Flavor Gauges (Animated Bars) -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div class="glass-card p-3 rounded-2xl border border-slate-800">
+              <div class="flex justify-between text-xs text-slate-400 mb-1">
+                <span>ความหวาน</span>
+                <span id="gaugeSweetVal" class="font-bold text-white">60%</span>
+              </div>
+              <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                <div id="gaugeSweetBar" class="bg-cyan-400 h-full rounded-full transition-all duration-700" style="width: 60%;"></div>
+              </div>
+            </div>
+
+            <div class="glass-card p-3 rounded-2xl border border-slate-800">
+              <div class="flex justify-between text-xs text-slate-400 mb-1">
+                <span>ความซ่า</span>
+                <span id="gaugeFizzVal" class="font-bold text-cyan-400">95%</span>
+              </div>
+              <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                <div id="gaugeFizzBar" class="bg-cyan-400 h-full rounded-full transition-all duration-700" style="width: 95%;"></div>
+              </div>
+            </div>
+
+            <div class="glass-card p-3 rounded-2xl border border-slate-800">
+              <div class="flex justify-between text-xs text-slate-400 mb-1">
+                <span>ความสดชื่น</span>
+                <span id="gaugeFreshVal" class="font-bold text-emerald-400">100%</span>
+              </div>
+              <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                <div id="gaugeFreshBar" class="bg-emerald-400 h-full rounded-full transition-all duration-700" style="width: 100%;"></div>
+              </div>
+            </div>
+
+            <div class="glass-card p-3 rounded-2xl border border-slate-800">
+              <div class="flex justify-between text-xs text-slate-400 mb-1">
+                <span>คาเฟอีน</span>
+                <span id="gaugeCafVal" class="font-bold text-amber-400">0 mg</span>
+              </div>
+              <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                <div id="gaugeCafBar" class="bg-amber-400 h-full rounded-full transition-all duration-700" style="width: 5%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive Animation Playground Buttons -->
+          <div class="space-y-2">
+            <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+              <span>🎮</span> ควบคุมแอนิเมชันของเหลว (Animation Actions):
+            </span>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              <button id="btnScStir" class="p-3 rounded-xl glass-card hover:bg-slate-800/80 border border-slate-700/80 text-xs font-medium text-white flex flex-col items-center justify-center gap-1 transition-all active:scale-95 group">
+                <span class="text-lg group-hover:rotate-180 transition-transform duration-500">🌀</span>
+                <span>คนน้ำ (Stir)</span>
+              </button>
+              <button id="btnScAddIce" class="p-3 rounded-xl glass-card hover:bg-slate-800/80 border border-slate-700/80 text-xs font-medium text-white flex flex-col items-center justify-center gap-1 transition-all active:scale-95 group">
+                <span class="text-lg group-hover:-translate-y-1 transition-transform">🧊</span>
+                <span>เติมน้ำแข็ง</span>
+              </button>
+              <button id="btnScFizz" class="p-3 rounded-xl glass-card hover:bg-slate-800/80 border border-slate-700/80 text-xs font-medium text-white flex flex-col items-center justify-center gap-1 transition-all active:scale-95 group">
+                <span class="text-lg group-hover:scale-125 transition-transform">🫧</span>
+                <span>ฟองฟู่ (Fizz)</span>
+              </button>
+              <button id="btnScSip" class="p-3 rounded-xl glass-card hover:bg-slate-800/80 border border-slate-700/80 text-xs font-medium text-white flex flex-col items-center justify-center gap-1 transition-all active:scale-95 group">
+                <span class="text-lg group-hover:scale-110 transition-transform">🥤</span>
+                <span>ดูดน้ำ (Sip)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Price & Add To Cart -->
+          <div class="pt-4 border-t border-slate-800 flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <span class="text-xs text-slate-400 block">ราคาจำหน่าย</span>
+              <span id="scPrice" class="text-2xl font-black text-white font-mono">฿125</span>
+            </div>
+
+            <button id="btnAddToCart" class="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-sm shadow-xl shadow-cyan-500/25 transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
+              <span>🛒 สั่งซื้อแก้วนี้ (Add to Cart)</span>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MIXOLOGY LAB: INTERACTIVE DRINK BUILDER -->
+  <section id="mixology" class="py-24 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-14 reveal-elem">
+        <span class="text-xs font-bold text-cyan-400 tracking-wider uppercase font-mono">Interactive Laboratory</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-2">Mixology Studio (ห้องทดลองปรุงรส)</h2>
+        <p class="text-slate-400 text-sm mt-3">
+          สร้างเครื่องดื่มในแบบของคุณเอง ปรับเปลี่ยนเบส รสชาติ และระดับความหวาน แล้วดูแอนิเมชันการผสมแบบเรียลไทม์
+        </p>
+      </div>
+
+      <div class="glass-card rounded-3xl p-6 md:p-10 border border-slate-800 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center reveal-elem">
+        
+        <!-- Mixer Controls (7 cols) -->
+        <div class="lg:col-span-7 space-y-6">
+          
+          <!-- Step 1: Base -->
+          <div class="space-y-2">
+            <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-[11px]">1</span>
+              เลือกเบสของเครื่องดื่ม (Liquid Base):
+            </label>
+            <div class="grid grid-cols-3 gap-2.5" id="mixerBaseOpts">
+              <button data-base="soda" class="mixer-base-btn active p-3 rounded-2xl border border-cyan-500 bg-cyan-500/20 text-xs font-semibold text-cyan-300 text-left transition-all">
+                <span class="block text-base mb-1">🫧</span>
+                Sparkling Soda
+              </button>
+              <button data-base="milk" class="mixer-base-btn p-3 rounded-2xl border border-slate-800 bg-slate-900/60 text-xs font-semibold text-slate-400 text-left hover:border-slate-700 transition-all">
+                <span class="block text-base mb-1">🥛</span>
+                Fresh Cream Milk
+              </button>
+              <button data-base="tea" class="mixer-base-btn p-3 rounded-2xl border border-slate-800 bg-slate-900/60 text-xs font-semibold text-slate-400 text-left hover:border-slate-700 transition-all">
+                <span class="block text-base mb-1">🫖</span>
+                Brewed Black Tea
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 2: Flavor Infusion -->
+          <div class="space-y-2">
+            <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-[11px]">2</span>
+              เลือกรสชาติหลัก (Flavor Infusion):
+            </label>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5" id="mixerFlavorOpts">
+              <button data-flavor="curacao" class="mixer-flavor-btn active p-2.5 rounded-2xl border border-blue-500 bg-blue-500/20 text-xs font-medium text-blue-300 text-center transition-all">
+                Blue Curaçao
+              </button>
+              <button data-flavor="matcha" class="mixer-flavor-btn p-2.5 rounded-2xl border border-slate-800 bg-slate-900/60 text-xs font-medium text-slate-400 text-center hover:border-slate-700 transition-all">
+                Uji Matcha
+              </button>
+              <button data-flavor="thai" class="mixer-flavor-btn p-2.5 rounded-2xl border border-slate-800 bg-slate-900/60 text-xs font-medium text-slate-400 text-center hover:border-slate-700 transition-all">
+                Thai Spiced Tea
+              </button>
+              <button data-flavor="mango" class="mixer-flavor-btn p-2.5 rounded-2xl border border-slate-800 bg-slate-900/60 text-xs font-medium text-slate-400 text-center hover:border-slate-700 transition-all">
+                Mango Passion
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 3: Sweetness & Ice Level Sliders -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+            <div class="glass-card p-4 rounded-2xl border border-slate-800">
+              <div class="flex justify-between text-xs text-slate-300 mb-2 font-medium">
+                <span>ระดับความหวาน (Sweetness):</span>
+                <span id="mixerSweetLabel" class="text-cyan-400 font-bold">50% (หวานน้อย)</span>
+              </div>
+              <input id="mixerSweetSlider" type="range" min="0" max="100" value="50" step="25" class="w-full accent-cyan-400 cursor-pointer">
+              <div class="flex justify-between text-[10px] text-slate-500 mt-1 font-mono">
+                <span>0%</span>
+                <span>25%</span>
+                <span>50%</span>
+                <span>100%</span>
+              </div>
+            </div>
+
+            <div class="glass-card p-4 rounded-2xl border border-slate-800">
+              <div class="flex justify-between text-xs text-slate-300 mb-2 font-medium">
+                <span>ปริมาณน้ำแข็ง (Ice Level):</span>
+                <span id="mixerIceLabel" class="text-cyan-400 font-bold">ปกติ (Full Ice)</span>
+              </div>
+              <input id="mixerIceSlider" type="range" min="1" max="3" value="3" step="1" class="w-full accent-cyan-400 cursor-pointer">
+              <div class="flex justify-between text-[10px] text-slate-500 mt-1 font-mono">
+                <span>น้อย</span>
+                <span>ปานกลาง</span>
+                <span>ปกติ</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-2 flex items-center justify-between">
+            <div>
+              <span class="text-xs text-slate-400">ชื่อสูตรของคุณ:</span>
+              <span id="customRecipeName" class="text-base font-bold text-white block">Blue Curaçao Sparkling Soda</span>
+            </div>
+            <button id="btnMixStir" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-white border border-slate-700 flex items-center gap-2 active:scale-95 transition-all">
+              <span>🌀 เขย่าผสม (Blend)</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Mixer Live Canvas Display (5 cols) -->
+        <div class="lg:col-span-5 flex flex-col items-center justify-center relative">
+          <div class="relative w-[180px] h-[280px] rounded-[24px] p-1.5 border-2 border-white/30 shadow-2xl overflow-hidden bg-white/5 backdrop-blur-sm">
+            <div class="absolute inset-y-0 left-2 w-3 bg-gradient-to-r from-white/30 to-transparent rounded-full pointer-events-none z-20"></div>
+            
+            <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-20 opacity-70">
+              <span class="text-white font-serif tracking-widest text-xs font-bold">CUSTOM LAB</span>
+            </div>
+
+            <canvas id="mixerCanvas" width="180" height="280" class="w-full h-full rounded-[18px] block"></canvas>
+          </div>
+          <div class="w-36 h-3 rounded-full bg-[#835332] shadow-xl border border-[#633a20] -mt-1 z-10"></div>
+
+          <p class="text-[11px] text-slate-400 mt-3">แอนิเมชันของเหลวจะเปลี่ยนสีและปฏิกิริยาตามการปรับแต่ง</p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CRAFTSMANSHIP & INGREDIENTS SECTION (3D TILT CARDS) -->
+  <section id="craftsmanship" class="py-24 border-t border-slate-800/80 bg-slate-950/40 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-16 reveal-elem">
+        <span class="text-xs font-bold text-cyan-400 tracking-wider uppercase font-mono">Philosophy</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-2">วัตถุดิบคัดสรรระดับพรีเมียม</h2>
+        <p class="text-slate-400 text-sm mt-3">
+          เพราะความสดชื่นที่แท้จริงเกิดจากความบริสุทธิ์ของธรรมชาติและกระบวนการชงที่ประณีตในทุกขั้นตอน
+        </p>
+      </div>
+
+      <!-- 4 Ingredients Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Card 1 -->
+        <div class="tilt-card glass-card p-6 rounded-3xl border border-slate-800 transition-all duration-300 hover:border-cyan-500/50 reveal-elem group">
+          <div class="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+            🌊
+          </div>
+          <h4 class="text-lg font-bold text-white">Blue Curaçao Essence</h4>
+          <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+            สกัดจากผิวส้มสายพันธุ์พิเศษ ให้โทนสีน้ำทะเลลึกและความหอมซีตรัสสดชื่นอันเป็นเอกลักษณ์
+          </p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="tilt-card glass-card p-6 rounded-3xl border border-slate-800 transition-all duration-300 hover:border-emerald-500/50 reveal-elem group">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+            🍵
+          </div>
+          <h4 class="text-lg font-bold text-white">Ceremonial Uji Matcha</h4>
+          <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+            มัทฉะเกรดพิธีการจากเกียวโต ประเทศญี่ปุ่น บดด้วยโม่หินช้าๆ เพื่อรักษากลิ่นอูมามิและคลอโรฟิลล์
+          </p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="tilt-card glass-card p-6 rounded-3xl border border-slate-800 transition-all duration-300 hover:border-amber-500/50 reveal-elem group">
+          <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+            🍂
+          </div>
+          <h4 class="text-lg font-bold text-white">Traditional Ceylon Tea</h4>
+          <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+            ใบชาซีลอนคั่วพิเศษ เบลนด์กับสมุนไพรอบเชยและโป๊ยกั๊ก ให้สีส้มสดและรสสัมผัสเข้มข้นแบบต้นตำรับ
+          </p>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="tilt-card glass-card p-6 rounded-3xl border border-slate-800 transition-all duration-300 hover:border-orange-500/50 reveal-elem group">
+          <div class="w-12 h-12 rounded-2xl bg-orange-500/10 text-orange-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+            🥭
+          </div>
+          <h4 class="text-lg font-bold text-white">Wild Passionfruit & Mango</h4>
+          <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+            เสาวรสสดออร์แกนิกผสมผสานมะม่วงสุกทองคำ เปรี้ยวหวานธรรมชาติเต็มคำพร้อมเมล็ดกรุบกรอบ
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CUSTOMER REVIEWS CAROUSEL -->
+  <section id="reviews" class="py-24 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-14 reveal-elem">
+        <span class="text-xs font-bold text-cyan-400 tracking-wider uppercase font-mono">Testimonials</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-2">เสียงตอบรับจากคนรักเครื่องดื่ม</h2>
+      </div>
+
+      <!-- Carousel Track Container -->
+      <div class="relative overflow-hidden cursor-grab active:cursor-grabbing" id="reviewCarouselContainer">
+        <div class="flex gap-6 transition-transform duration-500 ease-out" id="reviewTrack">
+          
+          <!-- Review 1 -->
+          <div class="min-w-[300px] sm:min-w-[360px] glass-card p-6 rounded-3xl border border-slate-800 flex-shrink-0">
+            <div class="flex text-amber-400 text-sm mb-3">★★★★★</div>
+            <p class="text-sm text-slate-300 leading-relaxed italic">
+              "Blue Lagoon Mocktail คือที่สุดของความสดชื่นเวลาบ่ายๆ ซ่ากำลังดี ไม่หวานเลี่ยน ดื่มแล้วตื่นทันทีครับ"
+            </p>
+            <div class="mt-4 pt-4 border-t border-slate-800 flex items-center gap-3">
+              <div class="w-9 h-9 rounded-full bg-cyan-500/20 text-cyan-400 font-bold flex items-center justify-center text-xs">P</div>
+              <div>
+                <span class="text-xs font-bold text-white block">คุณภัทรเดช ส.</span>
+                <span class="text-[10px] text-slate-500">Verified Customer</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Review 2 -->
+          <div class="min-w-[300px] sm:min-w-[360px] glass-card p-6 rounded-3xl border border-slate-800 flex-shrink-0">
+            <div class="flex text-amber-400 text-sm mb-3">★★★★★</div>
+            <p class="text-sm text-slate-300 leading-relaxed italic">
+              "มัทฉะลาเต้แยกชั้นสวยมาก รสชาติเข้มข้นนัวนม ไม่หวานเกินไป ชอบที่มีหลอดสแตนเลสให้ด้วย รักษ์โลกดีค่ะ"
+            </p>
+            <div class="mt-4 pt-4 border-t border-slate-800 flex items-center gap-3">
+              <div class="w-9 h-9 rounded-full bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center text-xs">N</div>
+              <div>
+                <span class="text-xs font-bold text-white block">คุณณิชาภา ก.</span>
+                <span class="text-[10px] text-slate-500">Verified Customer</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Review 3 -->
+          <div class="min-w-[300px] sm:min-w-[360px] glass-card p-6 rounded-3xl border border-slate-800 flex-shrink-0">
+            <div class="flex text-amber-400 text-sm mb-3">★★★★★</div>
+            <p class="text-sm text-slate-300 leading-relaxed italic">
+              "ชาไทยแท้รสชาติโบราณที่หาดื่มยาก กลิ่นหอมชาเตะจมูก ชั้นนมข้นหวานมันสะใจ สั่งประจำทุกสัปดาห์เลย"
+            </p>
+            <div class="mt-4 pt-4 border-t border-slate-800 flex items-center gap-3">
+              <div class="w-9 h-9 rounded-full bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center text-xs">T</div>
+              <div>
+                <span class="text-xs font-bold text-white block">คุณธนกฤต ม.</span>
+                <span class="text-[10px] text-slate-500">Verified Customer</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Review 4 -->
+          <div class="min-w-[300px] sm:min-w-[360px] glass-card p-6 rounded-3xl border border-slate-800 flex-shrink-0">
+            <div class="flex text-amber-400 text-sm mb-3">★★★★★</div>
+            <p class="text-sm text-slate-300 leading-relaxed italic">
+              "Mango Passionfruit Refresher กรุบกรอบเมล็ดเสาวรส ชิ้นส้มด้านบนหอมมาก เป็นแก้วโปรดในวันที่อากาศร้อนจัด"
+            </p>
+            <div class="mt-4 pt-4 border-t border-slate-800 flex items-center gap-3">
+              <div class="w-9 h-9 rounded-full bg-orange-500/20 text-orange-400 font-bold flex items-center justify-center text-xs">K</div>
+              <div>
+                <span class="text-xs font-bold text-white block">คุณกมลวรรณ ว.</span>
+                <span class="text-[10px] text-slate-500">Verified Customer</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Carousel Pagination Controls -->
+      <div class="flex items-center justify-center gap-3 mt-8">
+        <button id="btnPrevReview" class="w-9 h-9 rounded-full glass-card hover:bg-slate-800 flex items-center justify-center text-white border border-slate-700 transition-all">←</button>
+        <div class="flex gap-1.5" id="carouselDots">
+          <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-slate-700"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-slate-700"></span>
+        </div>
+        <button id="btnNextReview" class="w-9 h-9 rounded-full glass-card hover:bg-slate-800 flex items-center justify-center text-white border border-slate-700 transition-all">→</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-800 bg-[#060910] pt-16 pb-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-slate-800">
+        
+        <!-- Col 1: Brand -->
+        <div class="md:col-span-5 space-y-4">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white">
+              💧
+            </div>
+            <span class="text-xl font-bold tracking-widest text-white font-serif uppercase">thirst.</span>
+          </div>
+          <p class="text-xs text-slate-400 max-w-sm leading-relaxed">
+            คาเฟ่และเครื่องดื่มศิลปะที่สร้างสรรค์ความสดชื่นด้วยวิทยาศาสตร์ของรสชาติและความประณีตในทุกแก้ว
+          </p>
+          <div class="text-xs text-slate-500 font-mono">
+            เปิดบริการทุกวัน: 08:30 - 20:00 น.
+          </div>
+        </div>
+
+        <!-- Col 2: Quick Links -->
+        <div class="md:col-span-3 space-y-2 text-xs">
+          <span class="text-xs font-semibold text-white uppercase tracking-wider block mb-3">เมนูลัด (Navigation)</span>
+          <a href="#hero" class="block text-slate-400 hover:text-cyan-400 transition-colors">หน้าแรก</a>
+          <a href="#signature" class="block text-slate-400 hover:text-cyan-400 transition-colors">เมนูซิกเนเจอร์ 4 แก้ว</a>
+          <a href="#mixology" class="block text-slate-400 hover:text-cyan-400 transition-colors">Mixology Studio</a>
+          <a href="#craftsmanship" class="block text-slate-400 hover:text-cyan-400 transition-colors">ปรัชญาวัตถุดิบ</a>
+        </div>
+
+        <!-- Col 3: Newsletter -->
+        <div class="md:col-span-4 space-y-3">
+          <span class="text-xs font-semibold text-white uppercase tracking-wider block">รับสูตรลับ & คูปองส่วนลดพิเศษ</span>
+          <p class="text-xs text-slate-400">สมัครสมาชิกเพื่อรับข่าวสารเครื่องดื่มใหม่ประจำฤดูกาล</p>
+          <form id="subscribeForm" class="flex gap-2">
+            <input type="email" placeholder="กรอกอีเมลของคุณ..." required class="px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 flex-1">
+            <button type="submit" class="px-4 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition-all">สมัคร</button>
+          </form>
+          <span id="subSuccessMsg" class="text-xs text-emerald-400 hidden">✓ ขอบคุณสำหรับการติดตาม!</span>
+        </div>
+
+      </div>
+
+      <!-- Copyright -->
+      <div class="pt-8 flex flex-wrap items-center justify-between text-xs text-slate-500 gap-4">
+        <span>© 2026 thirst. Café & Beverage Co. All rights reserved.</span>
+        <button id="btnBackToTop" class="hover:text-cyan-400 transition-colors flex items-center gap-1">
+          <span>กลับขึ้นด้านบน</span> ↑
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- CART SLIDE-OVER DRAWER MODAL -->
+  <div id="cartModal" class="fixed inset-0 z-50 pointer-events-none transition-all duration-300 opacity-0">
+    <!-- Backdrop -->
+    <div id="cartBackdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"></div>
+    
+    <!-- Drawer -->
+    <div id="cartDrawer" class="absolute top-0 right-0 h-full w-full max-w-md bg-slate-900 border-l border-slate-800 shadow-2xl p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-300 pointer-events-auto">
+      <div>
+        <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <span>🛍️</span> ตะกร้าสินค้าของคุณ
+          </h3>
+          <button id="btnCloseCart" class="text-slate-400 hover:text-white text-lg">✕</button>
+        </div>
+
+        <div id="cartItemList" class="divide-y divide-slate-800 py-4 max-h-[60vh] overflow-y-auto custom-scroll">
+          <!-- Dynamic Items inserted here -->
+        </div>
+      </div>
+
+      <div class="pt-4 border-t border-slate-800 space-y-3">
+        <div class="flex justify-between text-sm">
+          <span class="text-slate-400">ยอดรวมทั้งสิ้น:</span>
+          <span id="cartTotalPrice" class="font-bold text-white text-lg font-mono">฿0</span>
+        </div>
+        <button id="btnCheckout" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-sm shadow-xl shadow-cyan-500/25 transition-all">
+          ดำเนินการชำระเงิน (Checkout)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT ANIMATION ENGINES -->
+  <script>
+    // ==========================================
+    // 1. DATA: 4 SIGNATURE DRINKS
+    // ==========================================
+    const signatureDrinks = [
+      {
+        id: "blue-lagoon",
+        name: "Iced Blue Lagoon Mocktail",
+        category: "Sparkling Mocktail",
+        desc: "ม็อกเทลโซดาสีฟ้าสดใส รสเปรี้ยวอมหวานซาบซ่าจากบลูคูราโซ่และมะนาวสด พร้อมใบสะระแหน่หอมสดชื่น ดับกระหายคลายร้อนในทันที",
+        price: 125,
+        themeColor: "#00b4d8",
+        gauges: { sweet: 60, fizz: 95, fresh: 100, caf: 0 },
+        liquidColors: [
+          { stop: 0.0, color: "rgba(0, 180, 216, 0.85)" },
+          { stop: 0.5, color: "rgba(0, 119, 182, 0.90)" },
+          { stop: 1.0, color: "rgba(3, 4, 94, 0.95)" }
+        ],
+        hasIce: true,
+        iceCount: 4,
+        bubbleRate: 35,
+        bubbleColor: "rgba(255, 255, 255, 0.7)",
+        garnish: { emoji: "🍋", show: true },
+        hasStraw: false,
+        hasSeeds: false
+      },
+      {
+        id: "matcha-latte",
+        name: "Iced Matcha Latte",
+        category: "Artisan Tea & Milk",
+        desc: "ชาเขียวมัทฉะเกรดพิธีการเข้มข้นจากเกียวโต แยกชั้นอย่างประณีตกับนมสดนุ่มละมุน โรยผงมัทฉะละเอียดด้านบน",
+        price: 145,
+        themeColor: "#2d6a4f",
+        gauges: { sweet: 40, fizz: 5, fresh: 80, caf: 65 },
+        liquidColors: [
+          { stop: 0.0, color: "rgba(250, 252, 248, 0.96)" },
+          { stop: 0.35, color: "rgba(220, 240, 205, 0.92)" },
+          { stop: 0.75, color: "rgba(74, 112, 67, 0.95)" },
+          { stop: 1.0, color: "rgba(30, 70, 32, 0.98)" }
+        ],
+        hasIce: true,
+        iceCount: 3,
+        bubbleRate: 5,
+        bubbleColor: "rgba(255, 255, 255, 0.3)",
+        garnish: { emoji: "🍵", show: false },
+        hasStraw: true,
+        hasSeeds: false
+      },
+      {
+        id: "thai-tea",
+        name: "Iced Thai Tea Latte",
+        category: "Signature Spiced Tea",
+        desc: "ชาไทยแท้สีส้มทองกลิ่นหอมกรุ่นเฉพาะตัว ท็อปบนชั้นนมข้นหวานมันสไตล์ไทยโบราณ กลมกล่อมชื่นใจ",
+        price: 115,
+        themeColor: "#e85d04",
+        gauges: { sweet: 75, fizz: 5, fresh: 70, caf: 50 },
+        liquidColors: [
+          { stop: 0.0, color: "rgba(235, 94, 40, 0.95)" },
+          { stop: 0.65, color: "rgba(220, 80, 25, 0.92)" },
+          { stop: 0.82, color: "rgba(254, 217, 183, 0.95)" },
+          { stop: 1.0, color: "rgba(255, 245, 225, 0.98)" }
+        ],
+        hasIce: true,
+        iceCount: 4,
+        bubbleRate: 8,
+        bubbleColor: "rgba(255, 255, 255, 0.4)",
+        garnish: { emoji: "🍂", show: false },
+        hasStraw: false,
+        hasSeeds: false
+      },
+      {
+        id: "mango-passion",
+        name: "Mango Passionfruit Refresher",
+        category: "Tropical Refresher",
+        desc: "น้ำมะม่วงสุกผสมเสาวรสแท้รสเปรี้ยวอมหวาน มีเมล็ดเสาวรสกรุบกรอบ ท็อปด้วยส้มอบแห้ง ดับกระหายคลายร้อน",
+        price: 135,
+        themeColor: "#f77f00",
+        gauges: { sweet: 65, fizz: 45, fresh: 100, caf: 0 },
+        liquidColors: [
+          { stop: 0.0, color: "rgba(255, 183, 3, 0.88)" },
+          { stop: 0.5, color: "rgba(251, 133, 0, 0.92)" },
+          { stop: 1.0, color: "rgba(217, 83, 0, 0.95)" }
+        ],
+        hasIce: true,
+        iceCount: 3,
+        bubbleRate: 20,
+        bubbleColor: "rgba(255, 255, 255, 0.6)",
+        garnish: { emoji: "🍊", show: true },
+        hasStraw: false,
+        hasSeeds: true
+      }
+    ];
+
+    // ==========================================
+    // 2. WEB AUDIO API SYNTHESIZER (NO EXTERNAL FILES)
+    // ==========================================
+    let audioCtx = null;
+    let soundEnabled = true;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    function playTone(freq, type = 'sine', duration = 0.15, vol = 0.1) {
+      if (!soundEnabled) return;
+      initAudio();
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function soundBubble() { playTone(400 + Math.random() * 200, 'sine', 0.1, 0.08); }
+    function soundIce() { playTone(1200 + Math.random() * 300, 'triangle', 0.08, 0.12); }
+    function soundStir() { playTone(250 + Math.random() * 50, 'sine', 0.25, 0.05); }
+
+    // Toggle Sound Button
+    const btnSoundToggle = document.getElementById('btnSoundToggle');
+    const soundIcon = document.getElementById('soundIcon');
+    btnSoundToggle.addEventListener('click', () => {
+      soundEnabled = !soundEnabled;
+      soundIcon.textContent = soundEnabled ? '🔊' : '🔇';
+      if (soundEnabled) soundBubble();
+    });
+
+    // ==========================================
+    // 3. FLUID CUSTOM CURSOR WITH LERP DAMPING
+    // ==========================================
+    const cursor = document.getElementById('customCursor');
+    const dot = document.getElementById('cursorDot');
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let cursorX = mouseX;
+    let cursorY = mouseY;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if (dot) {
+        dot.style.left = `${mouseX}px`;
+        dot.style.top = `${mouseY}px`;
+      }
+    });
+
+    function updateCursor() {
+      if (cursor) {
+        cursorX += (mouseX - cursorX) * 0.15;
+        cursorY += (mouseY - cursorY) * 0.15;
+        cursor.style.left = `${cursorX}px`;
+        cursor.style.top = `${cursorY}px`;
+      }
+      requestAnimationFrame(updateCursor);
+    }
+    requestAnimationFrame(updateCursor);
+
+    // Cursor hover effects on links and buttons
+    document.querySelectorAll('a, button, input, .cursor-pointer').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor && cursor.classList.add('hovering'));
+      el.addEventListener('mouseleave', () => cursor && cursor.classList.remove('hovering'));
+    });
+
+    // ==========================================
+    // 4. SCROLL PROGRESS & INTERSECTION OBSERVER
+    // ==========================================
+    const scrollProgress = document.getElementById('scrollProgress');
+    window.addEventListener('scroll', () => {
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (window.scrollY / docHeight) * 100;
+      scrollProgress.style.width = `${progress}%`;
+    });
+
+    // Scroll Reveal Elements
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal-elem').forEach(el => revealObserver.observe(el));
+
+    // ==========================================
+    // 5. CANVAS LIQUID ENGINE (CANVAS 2D PHYSICS)
+    // ==========================================
+    function createLiquidEngine(canvasId, drinkIndex = 0) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return null;
+
+      const ctx = canvas.getContext('2d');
+      const width = canvas.width;
+      const height = canvas.height;
+      const dpr = window.devicePixelRatio || 1;
+
+      let currentDrink = signatureDrinks[drinkIndex];
+      let liquidLevel = height * 0.75;
+      let targetLiquidLevel = liquidLevel;
+      let waveTime = Math.random() * 10;
+      let waveAmplitude = 10;
+      let sloshAngle = 0;
+      let targetSloshAngle = 0;
+      let vortexPower = 0;
+
+      let bubbles = [];
+      let iceCubes = [];
+      let seeds = [];
+      let condensationDrops = [];
+
+      function initIce(count) {
+        iceCubes = [];
+        for (let i = 0; i < count; i++) {
+          iceCubes.push({
+            x: 35 + i * 30 + (Math.random() * 10 - 5),
+            size: 26 + Math.random() * 6,
+            rotation: (Math.random() - 0.5) * 0.4,
+            bobPhase: Math.random() * Math.PI * 2
+          });
+        }
+      }
+
+      function initSeeds() {
+        seeds = [];
+        for (let i = 0; i < 24; i++) {
+          seeds.push({
+            x: 20 + Math.random() * (width - 40),
+            y: height - 15 - Math.random() * 70,
+            radiusX: 2.5 + Math.random() * 1.5,
+            radiusY: 1.5 + Math.random() * 1,
+            angle: Math.random() * Math.PI,
+            wobblePhase: Math.random() * Math.PI * 2
+          });
+        }
+      }
+
+      function initCondensation() {
+        condensationDrops = [];
+        for (let i = 0; i < 18; i++) {
+          condensationDrops.push({
+            x: 10 + Math.random() * (width - 20),
+            y: 60 + Math.random() * (height - 80),
+            radius: 1 + Math.random() * 2,
+            dripSpeed: 0.05 + Math.random() * 0.15,
+            opacity: 0.35 + Math.random() * 0.35
+          });
+        }
+      }
+
+      function spawnBubble(forced = false) {
+        if (!forced && Math.random() * 50 > currentDrink.bubbleRate) return;
+        bubbles.push({
+          x: 15 + Math.random() * (width - 30),
+          y: height - 10,
+          radius: 1 + Math.random() * 3,
+          speed: 1.2 + Math.random() * 1.5,
+          wobble: Math.random() * 50,
+          wobbleSpeed: 0.06 + Math.random() * 0.05
+        });
+      }
+
+      function setDrink(drink) {
+        currentDrink = drink;
+        initIce(drink.hasIce ? drink.iceCount : 0);
+        if (drink.hasSeeds) initSeeds(); else seeds = [];
+        bubbles = [];
+        waveAmplitude = 20;
+      }
+
+      function render() {
+        ctx.clearRect(0, 0, width, height);
+
+        liquidLevel += (targetLiquidLevel - liquidLevel) * 0.08;
+        sloshAngle += (targetSloshAngle - sloshAngle) * 0.08;
+        targetSloshAngle *= 0.95;
+        if (vortexPower > 0.01) vortexPower *= 0.96; else vortexPower = 0;
+
+        waveTime += 0.06;
+        waveAmplitude += (10 - waveAmplitude) * 0.05;
+
+        const surfaceY = height - liquidLevel;
+
+        // Draw Liquid
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(0, height);
+
+        const leftY = surfaceY - Math.tan(sloshAngle) * (width / 2);
+        ctx.lineTo(0, leftY);
+
+        const points = 20;
+        for (let i = 0; i <= points; i++) {
+          const x = (width / points) * i;
+          const normalizedX = (x / width) - 0.5;
+          const sloshYOffset = normalizedX * Math.tan(sloshAngle) * width;
+          const vortexDip = vortexPower * 28 * Math.sin(Math.PI * (i / points));
+          const wave = Math.sin(waveTime + i * 0.5) * waveAmplitude * 0.35 + 
+                       Math.cos(waveTime * 1.3 + i * 0.25) * (waveAmplitude * 0.2);
+          const y = surfaceY + sloshYOffset + wave + vortexDip;
+          ctx.lineTo(x, y);
+        }
+
+        ctx.lineTo(width, height);
+        ctx.closePath();
+
+        const grad = ctx.createLinearGradient(0, surfaceY, 0, height);
+        currentDrink.liquidColors.forEach(c => grad.addColorStop(c.stop, c.color));
+        ctx.fillStyle = grad;
+        ctx.fill();
+
+        // Condensation
+        condensationDrops.forEach(drop => {
+          drop.y += drop.dripSpeed;
+          if (drop.y > height - 10) drop.y = surfaceY + Math.random() * 20;
+          ctx.beginPath();
+          ctx.ellipse(drop.x, drop.y, drop.radius, drop.radius * 1.4, 0, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${drop.opacity})`;
+          ctx.fill();
+        });
+
+        // Ice Cubes
+        currentDrink.hasIce && iceCubes.forEach((ice, i) => {
+          const waveAtIce = Math.sin(waveTime + (ice.x / width) * 4) * (waveAmplitude * 0.3);
+          const sloshAtIce = ((ice.x / width) - 0.5) * Math.tan(sloshAngle) * width;
+          const iceY = surfaceY + sloshAtIce + waveAtIce + Math.sin(waveTime * 2 + ice.bobPhase) * 3 + (i * 2);
+
+          ctx.save();
+          ctx.translate(ice.x, iceY);
+          ctx.rotate(ice.rotation + sloshAngle * 0.4);
+
+          ctx.beginPath();
+          ctx.roundRect(-ice.size / 2, -ice.size / 2, ice.size, ice.size, 6);
+          ctx.fillStyle = "rgba(255, 255, 255, 0.45)";
+          ctx.fill();
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.75)";
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.moveTo(-ice.size / 2 + 3, -ice.size / 2 + 3);
+          ctx.lineTo(ice.size / 2 - 3, -ice.size / 2 + 3);
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+
+          ctx.restore();
+        });
+
+        // Passionfruit Seeds
+        if (currentDrink.hasSeeds && seeds.length > 0) {
+          seeds.forEach(seed => {
+            if (vortexPower > 0.05) {
+              seed.x += (Math.random() - 0.5) * vortexPower * 8;
+              seed.y -= Math.random() * vortexPower * 4;
+            }
+            ctx.save();
+            ctx.translate(seed.x, seed.y);
+            ctx.rotate(seed.angle + Math.sin(waveTime + seed.wobblePhase) * 0.2);
+            ctx.beginPath();
+            ctx.ellipse(0, 0, seed.radiusX, seed.radiusY, 0, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(54, 28, 12, 0.9)";
+            ctx.fill();
+            ctx.strokeStyle = "rgba(255, 214, 10, 0.5)";
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            ctx.restore();
+          });
+        }
+
+        // Bubbles
+        spawnBubble();
+        for (let i = bubbles.length - 1; i >= 0; i--) {
+          const b = bubbles[i];
+          b.y -= b.speed + (vortexPower * 2);
+          b.wobble += b.wobbleSpeed;
+          const currentX = b.x + Math.sin(b.wobble) * 2;
+
+          ctx.beginPath();
+          ctx.arc(currentX, b.y, b.radius, 0, Math.PI * 2);
+          ctx.fillStyle = currentDrink.bubbleColor;
+          ctx.fill();
+
+          if (b.y <= surfaceY + 2) {
+            ctx.beginPath();
+            ctx.arc(currentX, surfaceY, b.radius * 2, 0, Math.PI * 2);
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.4)";
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+            bubbles.splice(i, 1);
+          }
+        }
+
+        ctx.restore();
+        requestAnimationFrame(render);
+      }
+
+      initCondensation();
+      setDrink(currentDrink);
+      requestAnimationFrame(render);
+
+      return {
+        setDrink,
+        stir: () => {
+          vortexPower = 1.0;
+          waveAmplitude = 24;
+          for (let i = 0; i < 15; i++) spawnBubble(true);
+          soundStir();
+        },
+        addIce: () => {
+          waveAmplitude = 22;
+          iceCubes.push({
+            x: 35 + Math.random() * (width - 70),
+            size: 28,
+            rotation: (Math.random() - 0.5) * 0.5,
+            bobPhase: 0
+          });
+          for (let i = 0; i < 12; i++) spawnBubble(true);
+          soundIce();
+        },
+        fizz: () => {
+          waveAmplitude = 16;
+          for (let i = 0; i < 35; i++) spawnBubble(true);
+          soundBubble();
+        },
+        sip: () => {
+          targetLiquidLevel = height * 0.3;
+          waveAmplitude = 18;
+          soundBubble();
+          setTimeout(() => {
+            targetLiquidLevel = height * 0.75;
+            waveAmplitude = 25;
+            for (let i = 0; i < 20; i++) spawnBubble(true);
+          }, 1200);
+        },
+        tilt: (angle) => {
+          targetSloshAngle = angle;
+        }
+      };
+    }
+
+    // Initialize Hero & Showcase Engines
+    const heroEngine = createLiquidEngine('heroCanvas', 0);
+    const showcaseEngine = createLiquidEngine('showcaseCanvas', 0);
+
+    // 3D Glass Tilts
+    function setup3DTilt(elementId, engine) {
+      const card = document.getElementById(elementId);
+      if (!card) return;
+
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const mouseX = e.clientX - (rect.left + rect.width / 2);
+        const mouseY = e.clientY - (rect.top + rect.height / 2);
+
+        const tiltX = Math.max(-14, Math.min(14, -mouseY * 0.08));
+        const tiltY = Math.max(-16, Math.min(16, mouseX * 0.08));
+
+        card.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+        if (engine) engine.tilt(mouseX * 0.002);
+      });
+
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = `rotateX(0deg) rotateY(0deg)`;
+        if (engine) engine.tilt(0);
+      });
+
+      card.addEventListener('click', () => {
+        if (engine) engine.stir();
+      });
+    }
+
+    setup3DTilt('heroDrinkCard', heroEngine);
+    setup3DTilt('showcaseGlassCard', showcaseEngine);
+
+    // ==========================================
+    // 6. SHOWCASE TABS & DYNAMIC DATA BINDING
+    // ==========================================
+    let currentActiveIndex = 0;
+
+    function switchShowcaseDrink(index) {
+      currentActiveIndex = index;
+      const d = signatureDrinks[index];
+
+      // Update Tabs
+      const tabs = document.querySelectorAll('.showcase-tab');
+      tabs.forEach((tab, i) => {
+        if (i === index) {
+          tab.className = "showcase-tab active px-4 py-2.5 rounded-xl text-xs font-semibold bg-cyan-500 text-slate-950 flex items-center gap-2 shadow-lg transition-all";
+        } else {
+          tab.className = "showcase-tab px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white flex items-center gap-2 transition-all";
+        }
+      });
+
+      // Update Info
+      document.getElementById('scDrinkTitle').textContent = d.name;
+      document.getElementById('scDrinkDesc').textContent = d.desc;
+      document.getElementById('scCategoryTag').textContent = d.category;
+      document.getElementById('scPrice').textContent = `฿${d.price}`;
+
+      // Update Gauges
+      document.getElementById('gaugeSweetVal').textContent = `${d.gauges.sweet}%`;
+      document.getElementById('gaugeSweetBar').style.width = `${d.gauges.sweet}%`;
+
+      document.getElementById('gaugeFizzVal').textContent = `${d.gauges.fizz}%`;
+      document.getElementById('gaugeFizzBar').style.width = `${d.gauges.fizz}%`;
+
+      document.getElementById('gaugeFreshVal').textContent = `${d.gauges.fresh}%`;
+      document.getElementById('gaugeFreshBar').style.width = `${d.gauges.fresh}%`;
+
+      document.getElementById('gaugeCafVal').textContent = `${d.gauges.caf} mg`;
+      document.getElementById('gaugeCafBar').style.width = `${Math.min(100, (d.gauges.caf / 80) * 100)}%`;
+
+      // Update Aura Backlight
+      document.getElementById('showcaseAura').style.backgroundColor = d.themeColor;
+
+      // Update Straw & Garnish
+      const straw = document.getElementById('showcaseStraw');
+      straw.style.opacity = d.hasStraw ? '1' : '0';
+
+      const garnish = document.getElementById('showcaseGarnish');
+      if (d.garnish && d.garnish.show) {
+        garnish.style.opacity = '1';
+        garnish.querySelector('div').textContent = d.garnish.emoji;
+      } else {
+        garnish.style.opacity = '0';
+      }
+
+      showcaseEngine.setDrink(d);
+      soundBubble();
+    }
+
+    document.querySelectorAll('.showcase-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        switchShowcaseDrink(parseInt(tab.dataset.drink, 10));
+      });
+    });
+
+    // Showcase Action Buttons
+    document.getElementById('btnScStir').addEventListener('click', () => showcaseEngine.stir());
+    document.getElementById('btnScAddIce').addEventListener('click', () => showcaseEngine.addIce());
+    document.getElementById('btnScFizz').addEventListener('click', () => showcaseEngine.fizz());
+    document.getElementById('btnScSip').addEventListener('click', () => showcaseEngine.sip());
+
+    // ==========================================
+    // 7. MIXOLOGY STUDIO (DIY DRINK BUILDER)
+    // ==========================================
+    let customBase = 'soda';
+    let customFlavor = 'curacao';
+    let customSweet = 50;
+    let customIce = 3;
+
+    const mixerCanvas = document.getElementById('mixerCanvas');
+    const mixerCtx = mixerCanvas.getContext('2d');
+    let mixerWaveTime = 0;
+
+    const flavorColorMap = {
+      curacao: [
+        { stop: 0.0, color: "rgba(0, 180, 216, 0.85)" },
+        { stop: 0.5, color: "rgba(0, 119, 182, 0.90)" },
+        { stop: 1.0, color: "rgba(3, 4, 94, 0.95)" }
+      ],
+      matcha: [
+        { stop: 0.0, color: "rgba(250, 252, 248, 0.96)" },
+        { stop: 0.4, color: "rgba(220, 240, 205, 0.92)" },
+        { stop: 0.8, color: "rgba(74, 112, 67, 0.95)" },
+        { stop: 1.0, color: "rgba(30, 70, 32, 0.98)" }
+      ],
+      thai: [
+        { stop: 0.0, color: "rgba(235, 94, 40, 0.95)" },
+        { stop: 0.65, color: "rgba(220, 80, 25, 0.92)" },
+        { stop: 0.85, color: "rgba(254, 217, 183, 0.95)" },
+        { stop: 1.0, color: "rgba(255, 245, 225, 0.98)" }
+      ],
+      mango: [
+        { stop: 0.0, color: "rgba(255, 183, 3, 0.88)" },
+        { stop: 0.5, color: "rgba(251, 133, 0, 0.92)" },
+        { stop: 1.0, color: "rgba(217, 83, 0, 0.95)" }
+      ]
+    };
+
+    function renderMixer() {
+      mixerCtx.clearRect(0, 0, mixerCanvas.width, mixerCanvas.height);
+      mixerWaveTime += 0.05;
+
+      const surfaceY = mixerCanvas.height * 0.35;
+      const colors = flavorColorMap[customFlavor] || flavorColorMap.curacao;
+
+      mixerCtx.save();
+      mixerCtx.beginPath();
+      mixerCtx.moveTo(0, mixerCanvas.height);
+      mixerCtx.lineTo(0, surfaceY);
+
+      for (let i = 0; i <= 15; i++) {
+        const x = (mixerCanvas.width / 15) * i;
+        const wave = Math.sin(mixerWaveTime + i * 0.6) * 5;
+        mixerCtx.lineTo(x, surfaceY + wave);
+      }
+      mixerCtx.lineTo(mixerCanvas.width, mixerCanvas.height);
+      mixerCtx.closePath();
+
+      const grad = mixerCtx.createLinearGradient(0, surfaceY, 0, mixerCanvas.height);
+      colors.forEach(c => grad.addColorStop(c.stop, c.color));
+      mixerCtx.fillStyle = grad;
+      mixerCtx.fill();
+
+      // Render custom ice cubes according to slider
+      for (let i = 0; i < customIce; i++) {
+        const iceX = 35 + i * 35;
+        const iceY = surfaceY + Math.sin(mixerWaveTime * 2 + i) * 3 + 15;
+        mixerCtx.fillStyle = "rgba(255, 255, 255, 0.4)";
+        mixerCtx.strokeStyle = "rgba(255, 255, 255, 0.7)";
+        mixerCtx.beginPath();
+        mixerCtx.roundRect(iceX - 12, iceY - 12, 24, 24, 5);
+        mixerCtx.fill();
+        mixerCtx.stroke();
+      }
+
+      mixerCtx.restore();
+      requestAnimationFrame(renderMixer);
+    }
+    requestAnimationFrame(renderMixer);
+
+    // Update Recipe Title
+    function updateRecipeTitle() {
+      const flavorNames = { curacao: 'Blue Curaçao', matcha: 'Uji Matcha', thai: 'Thai Spiced Tea', mango: 'Mango Passion' };
+      const baseNames = { soda: 'Sparkling Soda', milk: 'Fresh Milk', tea: 'Brewed Tea' };
+      document.getElementById('customRecipeName').textContent = `${flavorNames[customFlavor]} ${baseNames[customBase]}`;
+    }
+
+    // Mixer Base buttons
+    document.querySelectorAll('.mixer-base-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.mixer-base-btn').forEach(b => {
+          b.className = "mixer-base-btn p-3 rounded-2xl border border-slate-800 bg-slate-900/60 text-xs font-semibold text-slate-400 text-left hover:border-slate-700 transition-all";
+        });
+        btn.className = "mixer-base-btn active p-3 rounded-2xl border border-cyan-500 bg-cyan-500/20 text-xs font-semibold text-cyan-300 text-left transition-all";
+        customBase = btn.dataset.base;
+        updateRecipeTitle();
+        soundBubble();
+      });
+    });
+
+    // Mixer Flavor buttons
+    document.querySelectorAll('.mixer-flavor-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.mixer-flavor-btn').forEach(b => {
+          b.className = "mixer-flavor-btn p-2.5 rounded-2xl border border-slate-800 bg-slate-900/60 text-xs font-medium text-slate-400 text-center hover:border-slate-700 transition-all";
+        });
+        btn.className = "mixer-flavor-btn active p-2.5 rounded-2xl border border-cyan-500 bg-cyan-500/20 text-xs font-medium text-cyan-300 text-center transition-all";
+        customFlavor = btn.dataset.flavor;
+        updateRecipeTitle();
+        soundBubble();
+      });
+    });
+
+    // Sliders
+    const sweetSlider = document.getElementById('mixerSweetSlider');
+    const sweetLabel = document.getElementById('mixerSweetLabel');
+    sweetSlider.addEventListener('input', (e) => {
+      customSweet = e.target.value;
+      sweetLabel.textContent = `${customSweet}% (${customSweet == 0 ? 'ไม่หวาน' : customSweet <= 50 ? 'หวานน้อย' : 'หวานปกติ'})`;
+    });
+
+    const iceSlider = document.getElementById('mixerIceSlider');
+    const iceLabel = document.getElementById('mixerIceLabel');
+    iceSlider.addEventListener('input', (e) => {
+      customIce = parseInt(e.target.value, 10);
+      iceLabel.textContent = customIce === 1 ? 'น้อย (Less Ice)' : customIce === 2 ? 'ปานกลาง (Medium)' : 'ปกติ (Full Ice)';
+      soundIce();
+    });
+
+    document.getElementById('btnMixStir').addEventListener('click', () => {
+      soundStir();
+      soundBubble();
+    });
+
+    // ==========================================
+    // 8. FLY-TO-CART ANIMATION & SHOPPING CART
+    // ==========================================
+    const cart = [];
+    const cartModal = document.getElementById('cartModal');
+    const cartDrawer = document.getElementById('cartDrawer');
+    const cartCountBadge = document.getElementById('cartCountBadge');
+    const cartItemList = document.getElementById('cartItemList');
+    const cartTotalPrice = document.getElementById('cartTotalPrice');
+
+    function openCart() {
+      cartModal.classList.remove('pointer-events-none');
+      cartModal.classList.add('opacity-100');
+      cartDrawer.classList.remove('translate-x-full');
+      renderCartItems();
+      soundBubble();
+    }
+
+    function closeCart() {
+      cartModal.classList.add('pointer-events-none');
+      cartModal.classList.remove('opacity-100');
+      cartDrawer.classList.add('translate-x-full');
+    }
+
+    document.getElementById('btnOpenCart').addEventListener('click', openCart);
+    document.getElementById('btnCloseCart').addEventListener('click', closeCart);
+    document.getElementById('cartBackdrop').addEventListener('click', closeCart);
+
+    function updateCartUI() {
+      const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
+      cartCountBadge.textContent = totalCount;
+      cartCountBadge.classList.add('scale-125');
+      setTimeout(() => cartCountBadge.classList.remove('scale-125'), 200);
+
+      const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      cartTotalPrice.textContent = `฿${totalPrice}`;
+    }
+
+    function renderCartItems() {
+      if (cart.length === 0) {
+        cartItemList.innerHTML = `
+          <div class="py-12 text-center text-slate-500 text-sm">
+            <span>🛒 ตะกร้าของคุณยังว่างอยู่</span>
+          </div>
+        `;
+        return;
+      }
+
+      cartItemList.innerHTML = cart.map((item, index) => `
+        <div class="py-3 flex items-center justify-between text-xs">
+          <div>
+            <span class="font-bold text-white block text-sm">${item.name}</span>
+            <span class="text-slate-400">฿${item.price} × ${item.qty}</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="changeQty(${index}, -1)" class="w-6 h-6 rounded-lg bg-slate-800 text-white font-bold flex items-center justify-center hover:bg-slate-700">-</button>
+            <span class="font-mono text-white">${item.qty}</span>
+            <button onclick="changeQty(${index}, 1)" class="w-6 h-6 rounded-lg bg-slate-800 text-white font-bold flex items-center justify-center hover:bg-slate-700">+</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    window.changeQty = function(index, delta) {
+      cart[index].qty += delta;
+      if (cart[index].qty <= 0) {
+        cart.splice(index, 1);
+      }
+      updateCartUI();
+      renderCartItems();
+      soundBubble();
+    };
+
+    // Add To Cart with Particle Flight
+    const btnAddToCart = document.getElementById('btnAddToCart');
+    btnAddToCart.addEventListener('click', (e) => {
+      const d = signatureDrinks[currentActiveIndex];
+      const existing = cart.find(item => item.id === d.id);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ id: d.id, name: d.name, price: d.price, qty: 1 });
+      }
+
+      // Fly particle
+      const rect = btnAddToCart.getBoundingClientRect();
+      const cartBtnRect = document.getElementById('btnOpenCart').getBoundingClientRect();
+
+      const particle = document.createElement('div');
+      particle.className = 'fly-particle';
+      particle.style.left = `${rect.left + rect.width / 2}px`;
+      particle.style.top = `${rect.top}px`;
+      particle.style.width = '18px';
+      particle.style.height = '18px';
+      particle.style.backgroundColor = d.themeColor;
+      particle.style.boxShadow = `0 0 12px ${d.themeColor}`;
+      document.body.appendChild(particle);
+
+      requestAnimationFrame(() => {
+        particle.style.left = `${cartBtnRect.left + cartBtnRect.width / 2}px`;
+        particle.style.top = `${cartBtnRect.top + cartBtnRect.height / 2}px`;
+        particle.style.transform = 'scale(0.3)';
+        particle.style.opacity = '0.4';
+      });
+
+      setTimeout(() => {
+        particle.remove();
+        updateCartUI();
+        soundBubble();
+      }, 750);
+    });
+
+    document.getElementById('btnCheckout').addEventListener('click', () => {
+      if (cart.length === 0) return;
+      alert('ขอบคุณสำหรับคำสั่งซื้อ! เครื่องดื่มของคุณกำลังถูกเตรียมอย่างพิถีพิถัน 🧊✨');
+      cart.length = 0;
+      updateCartUI();
+      closeCart();
+    });
+
+    // ==========================================
+    // 9. REVIEWS CAROUSEL WITH DRAG & BUTTON CONTROLS
+    // ==========================================
+    const reviewTrack = document.getElementById('reviewTrack');
+    let reviewIndex = 0;
+    const totalReviews = 4;
+
+    function updateCarousel() {
+      const cardWidth = 360 + 24; // card width + gap
+      reviewTrack.style.transform = `translateX(-${reviewIndex * cardWidth}px)`;
+      
+      const dots = document.querySelectorAll('#carouselDots span');
+      dots.forEach((dot, i) => {
+        dot.className = i === reviewIndex ? "w-2.5 h-2.5 rounded-full bg-cyan-400" : "w-2.5 h-2.5 rounded-full bg-slate-700";
+      });
+    }
+
+    document.getElementById('btnNextReview').addEventListener('click', () => {
+      reviewIndex = (reviewIndex + 1) % (totalReviews - 1);
+      updateCarousel();
+      soundBubble();
+    });
+
+    document.getElementById('btnPrevReview').addEventListener('click', () => {
+      reviewIndex = (reviewIndex - 1 + (totalReviews - 1)) % (totalReviews - 1);
+      updateCarousel();
+      soundBubble();
+    });
+
+    // Back to top button
+    document.getElementById('btnBackToTop').addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Newsletter subscription
+    document.getElementById('subscribeForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      document.getElementById('subSuccessMsg').classList.remove('hidden');
+      soundBubble();
+      e.target.reset();
+    });
+  </script>
+</body>
+</html>
